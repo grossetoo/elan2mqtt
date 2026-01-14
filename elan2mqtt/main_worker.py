@@ -295,10 +295,10 @@ async def main():
                             'identifiers': [f'eLan-climate-{mac}']
                         },
                         'command_topic': f'eLan/{mac}/command',
-                        'command_template': '{% if value == "Outside (5°C)" %}{"mode": 1}{% elif value == "Cold (18°C)" %}{"mode": 2}{% elif value == "Comfort (21°C)" %}{"mode": 3}{% elif value == "Warm (24°C)" %}{"mode": 4}{% endif %}',
+                        'command_template': '{% if value == "Outside" %}{"mode": 1}{% elif value == "Cold" %}{"mode": 2}{% elif value == "Comfort" %}{"mode": 3}{% elif value == "Warm" %}{"mode": 4}{% endif %}',
                         'state_topic': f'eLan/{mac}/status',
-                        'value_template': '{% if value_json.mode == 1 %}Outside (5°C){% elif value_json.mode == 2 %}Cold (18°C){% elif value_json.mode == 3 %}Comfort (21°C){% elif value_json.mode == 4 %}Warm (24°C){% endif %}',
-                        'options': ['Outside (5°C)', 'Cold (18°C)', 'Comfort (21°C)', 'Warm (24°C)'],
+                        'value_template': '{% if value_json.mode == 1 %}Outside{% elif value_json.mode == 2 %}Cold{% elif value_json.mode == 3 %}Comfort{% elif value_json.mode == 4 %}Warm{% endif %}',
+                        'options': ['Outside', 'Cold', 'Comfort', 'Warm'],
                         'icon': 'mdi:home-thermometer-outline'
                     }
                     mqtt_cli.publish(f'homeassistant/select/{mac}/mode/config',
