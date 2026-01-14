@@ -28,4 +28,3 @@ schema:
   log_level: list(debug|info|warning|error|fatal)?
   disable_autodiscovery: bool?
   mqtt_id: str?
-image: "ghcr.io/{arch}-elan2mqtt"
