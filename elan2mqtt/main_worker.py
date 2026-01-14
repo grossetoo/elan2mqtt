@@ -173,10 +173,16 @@ async def main():
                 # Najdi MAC adresu propojené RFATV-1 hlavice
                 thermostat_mac = None
                 if 'temperature sensor' in d[mac]['info']:
-                    # temperature sensor obsahuje: {'57844': 'temperature'}
+                    # temperature sensor obsahuje: {'10725': 'temperature'} - to je ID zařízení
                     for sensor_id in d[mac]['info']['temperature sensor']:
-                        thermostat_mac = sensor_id
-                        break
+                        # Najdi MAC adresu tohoto zařízení v d dictionary
+                        for device_mac in d:
+                            if d[device_mac]['info']['id'] == sensor_id:
+                                thermostat_mac = device_mac
+                                logger.info(f"Found RFATV-1 for HeatCoolArea {mac}: sensor ID {sensor_id} has MAC {device_mac}")
+                                break
+                        if thermostat_mac:
+                            break
 
                 if thermostat_mac is None:
                     logger.warning(f"HeatCoolArea {mac} nemá propojenou RFATV-1 hlavici!")
