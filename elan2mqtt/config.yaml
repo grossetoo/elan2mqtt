@@ -14,7 +14,7 @@ startup: application
 boot: auto
 options:
   eLanURL: ""
-  MQTTserver: "mqtt://user:password@core-mosquitto"
+  MQTTserver: "mqtt://admin:your_mqtt_password@core-mosquitto"
   username: "admin"
   password: ""
   log_level: "info"
