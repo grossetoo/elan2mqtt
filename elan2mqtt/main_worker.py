@@ -167,7 +167,7 @@ async def main():
             # 3. Thermostats - CLIMATE AUTODISCOVERY (MODIFIED)
             #
             if (d[mac]['info']['device info']['type'] == 'temperature regulation area'):
-                # HeatCoolArea management - publikuj plnohodnotnou climate entitu
+                # HeatCoolArea management - pouze řídící funkce
                 logger.info("Publishing climate discovery for HeatCoolArea: " + str(d[mac]['info']['device info']))
 
                 # Najdi MAC adresu propojené RFATV-1 hlavice
@@ -189,7 +189,7 @@ async def main():
                             'identifiers': [f'eLan-climate-{mac}'],
                             'connections': [["device_id", mac]],
                             'manufacturer': 'Elko EP',
-                            'model': 'HeatCoolArea + RFATV-1'
+                            'model': 'HeatCoolArea'
                         },
                         # Aktuální teplota z RFATV-1 hlavice
                         'current_temperature_topic': f'eLan/{thermostat_mac}/status',
@@ -218,8 +218,8 @@ async def main():
                         'temperature_unit': 'C',
                         'precision': 0.5,
 
-                        # JSON atributy z RFATV-1
-                        'json_attributes_topic': f'eLan/{thermostat_mac}/status'
+                        # JSON atributy z managementu
+                        'json_attributes_topic': f'eLan/{mac}/status'
                     }
 
                     mqtt_cli.publish(f'homeassistant/climate/{mac}/config',
@@ -246,45 +246,6 @@ async def main():
                     }
                     mqtt_cli.publish(f'homeassistant/number/{mac}/correction/config',
                                     bytearray(json.dumps(number_correction), 'utf-8'))
-
-                    # Number entity - Window Sensitivity
-                    number_window_sens = {
-                        'name': 'Window Sensitivity',
-                        'unique_id': f'eLan-{mac}-window-sens',
-                        'device': {
-                            'identifiers': [f'eLan-climate-{mac}']
-                        },
-                        'command_topic': f'eLan/{mac}/command',
-                        'command_template': '{"open window sensitivity": {{ value | int }} }',
-                        'state_topic': f'eLan/{thermostat_mac}/status',
-                        'value_template': "{{ value_json['open window sensitivity'] }}",
-                        'min': 0,
-                        'max': 3,
-                        'step': 1,
-                        'icon': 'mdi:window-open-variant'
-                    }
-                    mqtt_cli.publish(f'homeassistant/number/{mac}/window_sens/config',
-                                    bytearray(json.dumps(number_window_sens), 'utf-8'))
-
-                    # Number entity - Window Off Time
-                    number_window_time = {
-                        'name': 'Window Off Time',
-                        'unique_id': f'eLan-{mac}-window-time',
-                        'device': {
-                            'identifiers': [f'eLan-climate-{mac}']
-                        },
-                        'command_topic': f'eLan/{mac}/command',
-                        'command_template': '{"open window off time": {{ value | int }} }',
-                        'state_topic': f'eLan/{thermostat_mac}/status',
-                        'value_template': "{{ value_json['open window off time'] }}",
-                        'min': 0,
-                        'max': 60,
-                        'step': 10,
-                        'unit_of_measurement': 'min',
-                        'icon': 'mdi:timer'
-                    }
-                    mqtt_cli.publish(f'homeassistant/number/{mac}/window_time/config',
-                                    bytearray(json.dumps(number_window_time), 'utf-8'))
 
                     # Select entity - Mode
                     select_mode = {
@@ -320,105 +281,153 @@ async def main():
                     mqtt_cli.publish(f'homeassistant/switch/{mac}/power/config',
                                     bytearray(json.dumps(switch_power), 'utf-8'))
 
-                    # Binary senzory z RFATV-1 hlavice
-                    # Open Window
-                    binary_window = {
-                        'name': 'Open Window',
-                        'unique_id': f'eLan-{mac}-window',
-                        'device': {
-                            'identifiers': [f'eLan-climate-{mac}']
-                        },
-                        'state_topic': f'eLan/{thermostat_mac}/status',
-                        'value_template': '{{ value_json["open window"] }}',
-                        'device_class': 'window'
-                    }
-                    mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/window/config',
-                                    bytearray(json.dumps(binary_window), 'utf-8'))
-
-                    # Battery (invertováno pro správný device_class)
-                    binary_battery = {
-                        'name': 'Battery',
-                        'unique_id': f'eLan-{mac}-battery',
-                        'device': {
-                            'identifiers': [f'eLan-climate-{mac}']
-                        },
-                        'state_topic': f'eLan/{thermostat_mac}/status',
-                        'value_template': '{% if value_json.battery %}off{% else %}on{% endif %}',
-                        'device_class': 'battery'
-                    }
-                    mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/battery/config',
-                                    bytearray(json.dumps(binary_battery), 'utf-8'))
-
-                    # Locked
-                    binary_locked = {
-                        'name': 'Locked',
-                        'unique_id': f'eLan-{mac}-locked',
-                        'device': {
-                            'identifiers': [f'eLan-climate-{mac}']
-                        },
-                        'state_topic': f'eLan/{thermostat_mac}/status',
-                        'value_template': '{{ value_json.locked }}',
-                        'device_class': 'lock'
-                    }
-                    mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/locked/config',
-                                    bytearray(json.dumps(binary_locked), 'utf-8'))
-
-                    # Error
-                    binary_error = {
-                        'name': 'Error',
-                        'unique_id': f'eLan-{mac}-error',
-                        'device': {
-                            'identifiers': [f'eLan-climate-{mac}']
-                        },
-                        'state_topic': f'eLan/{thermostat_mac}/status',
-                        'value_template': '{{ value_json.error }}',
-                        'device_class': 'problem'
-                    }
-                    mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/error/config',
-                                    bytearray(json.dumps(binary_error), 'utf-8'))
-
-                    # Sensor - Valve position
-                    sensor_valve = {
-                        'name': 'Valve',
-                        'unique_id': f'eLan-{mac}-valve',
-                        'device': {
-                            'identifiers': [f'eLan-climate-{mac}']
-                        },
-                        'state_topic': f'eLan/{thermostat_mac}/status',
-                        'value_template': "{{ value_json['open valve'] }}",
-                        'unit_of_measurement': '%',
-                        'icon': 'mdi:valve',
-                        'device_class': 'power_factor'
-                    }
-                    mqtt_cli.publish(f'homeassistant/sensor/{mac}/valve/config',
-                                    bytearray(json.dumps(sensor_valve), 'utf-8'))
-
-                    logger.info(f"All climate entities published for HeatCoolArea {mac}")
+                    logger.info(f"Climate entities published for HeatCoolArea {mac}")
 
             elif (d[mac]['info']['device info']['product type'] == 'RFATV-1'):
-                # RFATV-1 bez managementu - publikuj jen jako temperature sensor
-                logger.info("Publishing temperature sensor for standalone RFATV-1: " + str(d[mac]['info']['device info']))
+                # RFATV-1 hlavice - vytvoř kompletní senzorové zařízení
+                logger.info("Publishing sensor device for RFATV-1: " + str(d[mac]['info']['device info']))
 
-                discovery = {
-                    'name': 'Teplota',
-                    'unique_id': ('eLan-' + mac),
+                device_label = d[mac]['info']['device info']['label']
+
+                # Temperature sensor (hlavní entita)
+                temp_sensor = {
+                    'name': 'Temperature',
+                    'unique_id': f'eLan-{mac}-temperature',
                     'device': {
-                        'name': d[mac]['info']['device info']['label'],
-                        'identifiers' : ('eLan-thermostat-' + mac),
-                        'connections': [["mac",  mac]],
-                        'mf': 'Elko EP',
-                        'mdl': d[mac]['info']['device info']['product type']
+                        'name': device_label,
+                        'identifiers': [f'eLan-rfatv-{mac}'],
+                        'connections': [["mac", mac]],
+                        'manufacturer': 'Elko EP',
+                        'model': 'RFATV-1'
                     },
                     'device_class': 'temperature',
-                    'state_topic': d[mac]['status_topic'],
-                    'json_attributes_topic': d[mac]['status_topic'],
+                    'state_topic': f'eLan/{mac}/status',
                     'value_template': '{{ value_json.temperature }}',
                     'unit_of_measurement': '°C'
                 }
-                mqtt_cli.publish('homeassistant/sensor/' + mac + '/IN/config',
-                                bytearray(json.dumps(discovery), 'utf-8'))
-                logger.info("Discovery 3.1. published for " + d[mac]['url'])
-                logger.debug(json.dumps(discovery))
+                mqtt_cli.publish(f'homeassistant/sensor/{mac}/temperature/config',
+                                bytearray(json.dumps(temp_sensor), 'utf-8'))
+
+                # Number entity - Window Sensitivity
+                number_window_sens = {
+                    'name': 'Window Sensitivity',
+                    'unique_id': f'eLan-{mac}-window-sens',
+                    'device': {
+                        'identifiers': [f'eLan-rfatv-{mac}']
+                    },
+                    'command_topic': f'eLan/{mac}/command',
+                    'command_template': '{"open window sensitivity": {{ value | int }} }',
+                    'state_topic': f'eLan/{mac}/status',
+                    'value_template': "{{ value_json['open window sensitivity'] }}",
+                    'min': 0,
+                    'max': 3,
+                    'step': 1,
+                    'icon': 'mdi:window-open-variant'
+                }
+                mqtt_cli.publish(f'homeassistant/number/{mac}/window_sens/config',
+                                bytearray(json.dumps(number_window_sens), 'utf-8'))
+
+                # Number entity - Window Off Time
+                number_window_time = {
+                    'name': 'Window Off Time',
+                    'unique_id': f'eLan-{mac}-window-time',
+                    'device': {
+                        'identifiers': [f'eLan-rfatv-{mac}']
+                    },
+                    'command_topic': f'eLan/{mac}/command',
+                    'command_template': '{"open window off time": {{ value | int }} }',
+                    'state_topic': f'eLan/{mac}/status',
+                    'value_template': "{{ value_json['open window off time'] }}",
+                    'min': 0,
+                    'max': 60,
+                    'step': 10,
+                    'unit_of_measurement': 'min',
+                    'icon': 'mdi:timer'
+                }
+                mqtt_cli.publish(f'homeassistant/number/{mac}/window_time/config',
+                                bytearray(json.dumps(number_window_time), 'utf-8'))
+
+                # Binary sensor - Open Window
+                binary_window = {
+                    'name': 'Open Window',
+                    'unique_id': f'eLan-{mac}-window',
+                    'device': {
+                        'identifiers': [f'eLan-rfatv-{mac}']
+                    },
+                    'state_topic': f'eLan/{mac}/status',
+                    'value_template': '{{ value_json["open window"] }}',
+                    'device_class': 'window',
+                    'payload_on': 'true',
+                    'payload_off': 'false'
+                }
+                mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/window/config',
+                                bytearray(json.dumps(binary_window), 'utf-8'))
+
+                # Binary sensor - Battery (invertováno pro správný device_class)
+                binary_battery = {
+                    'name': 'Battery',
+                    'unique_id': f'eLan-{mac}-battery',
+                    'device': {
+                        'identifiers': [f'eLan-rfatv-{mac}']
+                    },
+                    'state_topic': f'eLan/{mac}/status',
+                    'value_template': '{% if value_json.battery == true %}OFF{% else %}ON{% endif %}',
+                    'device_class': 'battery',
+                    'payload_on': 'ON',
+                    'payload_off': 'OFF'
+                }
+                mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/battery/config',
+                                bytearray(json.dumps(binary_battery), 'utf-8'))
+
+                # Binary sensor - Locked
+                binary_locked = {
+                    'name': 'Locked',
+                    'unique_id': f'eLan-{mac}-locked',
+                    'device': {
+                        'identifiers': [f'eLan-rfatv-{mac}']
+                    },
+                    'state_topic': f'eLan/{mac}/status',
+                    'value_template': '{{ value_json.locked }}',
+                    'device_class': 'lock',
+                    'payload_on': 'true',
+                    'payload_off': 'false'
+                }
+                mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/locked/config',
+                                bytearray(json.dumps(binary_locked), 'utf-8'))
+
+                # Binary sensor - Error
+                binary_error = {
+                    'name': 'Error',
+                    'unique_id': f'eLan-{mac}-error',
+                    'device': {
+                        'identifiers': [f'eLan-rfatv-{mac}']
+                    },
+                    'state_topic': f'eLan/{mac}/status',
+                    'value_template': '{{ value_json.error }}',
+                    'device_class': 'problem',
+                    'payload_on': 'true',
+                    'payload_off': 'false'
+                }
+                mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/error/config',
+                                bytearray(json.dumps(binary_error), 'utf-8'))
+
+                # Sensor - Valve position
+                sensor_valve = {
+                    'name': 'Valve',
+                    'unique_id': f'eLan-{mac}-valve',
+                    'device': {
+                        'identifiers': [f'eLan-rfatv-{mac}']
+                    },
+                    'state_topic': f'eLan/{mac}/status',
+                    'value_template': "{{ value_json['open valve'] }}",
+                    'unit_of_measurement': '%',
+                    'icon': 'mdi:valve',
+                    'device_class': 'power_factor'
+                }
+                mqtt_cli.publish(f'homeassistant/sensor/{mac}/valve/config',
+                                bytearray(json.dumps(sensor_valve), 'utf-8'))
+
+                logger.info(f"All sensor entities published for RFATV-1 {mac}")
 
 
             #
