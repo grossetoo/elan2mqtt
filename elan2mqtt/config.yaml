@@ -1,0 +1,31 @@
+name: "eLAN MQTT Gateway"
+version: "2.0.0"
+slug: elan2mqtt
+description: "eLAN to MQTT Gateway with Climate Autodiscovery"
+url: "https://github.com/grossetoo/elan2mqtt"
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+init: false
+startup: application
+boot: auto
+options:
+  eLanURL: ""
+  MQTTserver: "mqtt://user:password@core-mosquitto"
+  username: "admin"
+  password: ""
+  log_level: "info"
+  disable_autodiscovery: false
+  mqtt_id: ""
+schema:
+  eLanURL: str
+  MQTTserver: str
+  username: str
+  password: password
+  log_level: list(debug|info|warning|error|fatal)?
+  disable_autodiscovery: bool?
+  mqtt_id: str?
+image: "ghcr.io/{arch}-elan2mqtt"

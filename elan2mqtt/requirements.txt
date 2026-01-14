@@ -1,0 +1,9 @@
+argparse
+paho-mqtt==1.6.1
+multidict
+attrs
+yarl
+async-timeout==4.0.3
+charset_normalizer==3.3.2
+aiosignal
+aiohttp==3.9.3
