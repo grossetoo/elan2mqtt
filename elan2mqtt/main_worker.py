@@ -183,7 +183,6 @@ async def main():
                 else:
                     # Climate entity - hlavní termostat
                     climate_discovery = {
-                        'name': d[mac]['info']['device info']['label'],
                         'unique_id': f'eLan-climate-{mac}',
                         'device': {
                             'name': d[mac]['info']['device info']['label'],
@@ -230,7 +229,7 @@ async def main():
 
                     # Number entity - Temperature Correction
                     number_correction = {
-                        'name': f"{d[mac]['info']['device info']['label']} Correction",
+                        'name': 'Correction',
                         'unique_id': f'eLan-{mac}-correction',
                         'device': {
                             'identifiers': [f'eLan-climate-{mac}']
@@ -250,7 +249,7 @@ async def main():
 
                     # Number entity - Window Sensitivity
                     number_window_sens = {
-                        'name': f"{d[mac]['info']['device info']['label']} Window Sensitivity",
+                        'name': 'Window Sensitivity',
                         'unique_id': f'eLan-{mac}-window-sens',
                         'device': {
                             'identifiers': [f'eLan-climate-{mac}']
@@ -269,7 +268,7 @@ async def main():
 
                     # Number entity - Window Off Time
                     number_window_time = {
-                        'name': f"{d[mac]['info']['device info']['label']} Window Off Time",
+                        'name': 'Window Off Time',
                         'unique_id': f'eLan-{mac}-window-time',
                         'device': {
                             'identifiers': [f'eLan-climate-{mac}']
@@ -289,7 +288,7 @@ async def main():
 
                     # Select entity - Mode
                     select_mode = {
-                        'name': f"{d[mac]['info']['device info']['label']} Mode",
+                        'name': 'Mode',
                         'unique_id': f'eLan-{mac}-mode',
                         'device': {
                             'identifiers': [f'eLan-climate-{mac}']
@@ -306,7 +305,7 @@ async def main():
 
                     # Switch entity - Power
                     switch_power = {
-                        'name': f"{d[mac]['info']['device info']['label']} Power",
+                        'name': 'Power',
                         'unique_id': f'eLan-{mac}-power',
                         'device': {
                             'identifiers': [f'eLan-climate-{mac}']
@@ -324,7 +323,7 @@ async def main():
                     # Binary senzory z RFATV-1 hlavice
                     # Open Window
                     binary_window = {
-                        'name': f"{d[mac]['info']['device info']['label']} Open Window",
+                        'name': 'Open Window',
                         'unique_id': f'eLan-{mac}-window',
                         'device': {
                             'identifiers': [f'eLan-climate-{mac}']
@@ -338,7 +337,7 @@ async def main():
 
                     # Battery (invertováno pro správný device_class)
                     binary_battery = {
-                        'name': f"{d[mac]['info']['device info']['label']} Battery",
+                        'name': 'Battery',
                         'unique_id': f'eLan-{mac}-battery',
                         'device': {
                             'identifiers': [f'eLan-climate-{mac}']
@@ -352,7 +351,7 @@ async def main():
 
                     # Locked
                     binary_locked = {
-                        'name': f"{d[mac]['info']['device info']['label']} Locked",
+                        'name': 'Locked',
                         'unique_id': f'eLan-{mac}-locked',
                         'device': {
                             'identifiers': [f'eLan-climate-{mac}']
@@ -366,7 +365,7 @@ async def main():
 
                     # Error
                     binary_error = {
-                        'name': f"{d[mac]['info']['device info']['label']} Error",
+                        'name': 'Error',
                         'unique_id': f'eLan-{mac}-error',
                         'device': {
                             'identifiers': [f'eLan-climate-{mac}']
@@ -380,7 +379,7 @@ async def main():
 
                     # Sensor - Valve position
                     sensor_valve = {
-                        'name': f"{d[mac]['info']['device info']['label']} Valve",
+                        'name': 'Valve',
                         'unique_id': f'eLan-{mac}-valve',
                         'device': {
                             'identifiers': [f'eLan-climate-{mac}']
