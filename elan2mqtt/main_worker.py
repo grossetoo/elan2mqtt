@@ -363,8 +363,8 @@ async def main():
                     'state_topic': f'eLan/{mac}/status',
                     'value_template': '{{ value_json["open window"] | lower }}',
                     'device_class': 'window',
-                    'payload_on': 'true',
-                    'payload_off': 'false'
+                    'payload_on': 'ON',
+                    'payload_off': 'OFF'
                 }
                 mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/window/config',
                                 bytearray(json.dumps(binary_window), 'utf-8'))
@@ -395,8 +395,8 @@ async def main():
                     'state_topic': f'eLan/{mac}/status',
                     'value_template': '{{ value_json.locked | lower }}',
                     'device_class': 'lock',
-                    'payload_on': 'true',
-                    'payload_off': 'false'
+                    'payload_on': 'ON',
+                    'payload_off': 'OFF'
                 }
                 mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/locked/config',
                                 bytearray(json.dumps(binary_locked), 'utf-8'))
@@ -411,8 +411,8 @@ async def main():
                     'state_topic': f'eLan/{mac}/status',
                     'value_template': '{{ value_json.error | lower }}',
                     'device_class': 'problem',
-                    'payload_on': 'true',
-                    'payload_off': 'false'
+                    'payload_on': 'ON',
+                    'payload_off': 'OFF'
                 }
                 mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/error/config',
                                 bytearray(json.dumps(binary_error), 'utf-8'))
