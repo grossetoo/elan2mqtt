@@ -1,5 +1,5 @@
 name: "eLAN MQTT Gateway"
-version: "2.0.0"
+version: "2.0.1"
 slug: elan2mqtt
 description: "eLAN to MQTT Gateway with Climate Autodiscovery"
 url: "https://github.com/grossetoo/elan2mqtt"
