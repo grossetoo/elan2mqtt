@@ -402,20 +402,18 @@ async def main():
                                 bytearray(json.dumps(binary_locked), 'utf-8'))
 
                 # Binary sensor - Error
-                binary_error = {
+                sensor_error = {
                     'name': 'Error',
                     'unique_id': f'eLan-{mac}-error',
                     'device': {
                         'identifiers': [f'eLan-rfatv-{mac}']
                     },
                     'state_topic': f'eLan/{mac}/status',
-                    'value_template': 'true',
-                    'device_class': 'problem',
-                    'payload_on': 'true',
-                    'payload_off': 'false'
+                    'value_template': '{{ value_json.error }}',
+                    'icon': 'mdi:alert-circle'
                 }
-                mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/error/config',
-                                bytearray(json.dumps(binary_error), 'utf-8'))
+                mqtt_cli.publish(f'homeassistant/sensor/{mac}/error/config',
+                                bytearray(json.dumps(sensor_error), 'utf-8'))
 
                 # Sensor - Valve position
                 sensor_valve = {
