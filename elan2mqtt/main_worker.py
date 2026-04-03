@@ -395,8 +395,8 @@ async def main():
                     'state_topic': f'eLan/{mac}/status',
                     'value_template': '{{ value_json.locked }}',
                     'device_class': 'lock',
-                    'payload_on': 'ON',
-                    'payload_off': 'OFF'
+                    'payload_on': 'True',
+                    'payload_off': 'False'
                 }
                 mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/locked/config',
                                 bytearray(json.dumps(binary_locked), 'utf-8'))
@@ -409,10 +409,10 @@ async def main():
                         'identifiers': [f'eLan-rfatv-{mac}']
                     },
                     'state_topic': f'eLan/{mac}/status',
-                    'value_template': '{% if value_json.error == true | lower %}OFF{% else %}ON{% endif %}',
+                    'value_template': 'true',
                     'device_class': 'problem',
-                    'payload_on': 'ON',
-                    'payload_off': 'OFF'
+                    'payload_on': 'true',
+                    'payload_off': 'false'
                 }
                 mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/error/config',
                                 bytearray(json.dumps(binary_error), 'utf-8'))
