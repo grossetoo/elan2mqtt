@@ -361,7 +361,7 @@ async def main():
                         'identifiers': [f'eLan-rfatv-{mac}']
                     },
                     'state_topic': f'eLan/{mac}/status',
-                    'value_template': '{{ value_json["open window"] }}',
+                    'value_template': '{{ value_json["open window"] | lower }}',
                     'device_class': 'window',
                     'payload_on': 'true',
                     'payload_off': 'false'
@@ -393,7 +393,7 @@ async def main():
                         'identifiers': [f'eLan-rfatv-{mac}']
                     },
                     'state_topic': f'eLan/{mac}/status',
-                    'value_template': '{{ value_json.locked }}',
+                    'value_template': '{{ value_json.locked | lower }}',
                     'device_class': 'lock',
                     'payload_on': 'true',
                     'payload_off': 'false'
@@ -409,7 +409,7 @@ async def main():
                         'identifiers': [f'eLan-rfatv-{mac}']
                     },
                     'state_topic': f'eLan/{mac}/status',
-                    'value_template': '{{ value_json.error }}',
+                    'value_template': '{{ value_json.error | lower }}',
                     'device_class': 'problem',
                     'payload_on': 'true',
                     'payload_off': 'false'
