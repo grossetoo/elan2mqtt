@@ -356,12 +356,12 @@ async def main():
                 # Binary sensor - Open Window
                 binary_window = {
                     'name': 'Open Window',
-                    'unique_id': f'eLan-{mac}-window',
+                    'unique_id': f'eLan-{mac}-open-window',
                     'device': {
                         'identifiers': [f'eLan-rfatv-{mac}']
                     },
                     'state_topic': f'eLan/{mac}/status',
-                    'value_template': '{{ value_json.window }}',
+                    'value_template': '{{ value_json['open window'] }}',
                     'device_class': 'lock',
                     'payload_on': 'True',
                     'payload_off': 'False'
