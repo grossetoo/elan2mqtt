@@ -361,10 +361,10 @@ async def main():
                         'identifiers': [f'eLan-rfatv-{mac}']
                     },
                     'state_topic': f'eLan/{mac}/status',
-                    'value_template': '{{ value_json["open window"] | lower }}',
-                    'device_class': 'window',
-                    'payload_on': 'ON',
-                    'payload_off': 'OFF'
+                    'value_template': '{{ value_json.window }}',
+                    'device_class': 'lock',
+                    'payload_on': 'True',
+                    'payload_off': 'False'
                 }
                 mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/window/config',
                                 bytearray(json.dumps(binary_window), 'utf-8'))
@@ -377,10 +377,10 @@ async def main():
                         'identifiers': [f'eLan-rfatv-{mac}']
                     },
                     'state_topic': f'eLan/{mac}/status',
-                    'value_template': '{% if value_json.battery == true %}OFF{% else %}ON{% endif %}',
-                    'device_class': 'battery',
-                    'payload_on': 'ON',
-                    'payload_off': 'OFF'
+                    'value_template': '{{ value_json.battery }}',
+                    'device_class': 'lock',
+                    'payload_on': 'False',
+                    'payload_off': 'True'
                 }
                 mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/battery/config',
                                 bytearray(json.dumps(binary_battery), 'utf-8'))
@@ -402,7 +402,7 @@ async def main():
                                 bytearray(json.dumps(binary_locked), 'utf-8'))
 
                 # Binary sensor - Error
-                sensor_error = {
+                binary_error = {
                     'name': 'Error',
                     'unique_id': f'eLan-{mac}-error',
                     'device': {
@@ -410,7 +410,9 @@ async def main():
                     },
                     'state_topic': f'eLan/{mac}/status',
                     'value_template': '{{ value_json.error }}',
-                    'icon': 'mdi:alert-circle'
+                    'device_class': 'lock',
+                    'payload_on': 'True',
+                    'payload_off': 'False'
                 }
                 mqtt_cli.publish(f'homeassistant/sensor/{mac}/error/config',
                                 bytearray(json.dumps(sensor_error), 'utf-8'))
