@@ -409,7 +409,7 @@ async def main():
                         'identifiers': [f'eLan-rfatv-{mac}']
                     },
                     'state_topic': f'eLan/{mac}/status',
-                    'value_template': '{{ value_json.error | lower }}',
+                    'value_template': '{% if value_json.error == true %}OFF{% else %}ON{% endif %}',
                     'device_class': 'problem',
                     'payload_on': 'ON',
                     'payload_off': 'OFF'
