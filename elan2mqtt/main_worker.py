@@ -361,7 +361,7 @@ async def main():
                         'identifiers': [f'eLan-rfatv-{mac}']
                     },
                     'state_topic': f'eLan/{mac}/status',
-                    'value_template': '{{ value_json['open window'] }}',
+                    'value_template': "{{ value_json['open window'] }}",
                     'device_class': 'lock',
                     'payload_on': 'True',
                     'payload_off': 'False'
