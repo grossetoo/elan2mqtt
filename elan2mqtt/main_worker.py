@@ -362,7 +362,7 @@ async def main():
                     },
                     'state_topic': f'eLan/{mac}/status',
                     'value_template': "{{ value_json['open window'] }}",
-                    'device_class': 'lock',
+                    'device_class': 'window',
                     'payload_on': 'True',
                     'payload_off': 'False'
                 }
@@ -378,7 +378,7 @@ async def main():
                     },
                     'state_topic': f'eLan/{mac}/status',
                     'value_template': '{{ value_json.battery }}',
-                    'device_class': 'lock',
+                    'device_class': 'battery',
                     'payload_on': 'False',
                     'payload_off': 'True'
                 }
@@ -410,7 +410,7 @@ async def main():
                     },
                     'state_topic': f'eLan/{mac}/status',
                     'value_template': '{{ value_json.error }}',
-                    'device_class': 'lock',
+                    'device_class': 'problem',
                     'payload_on': 'True',
                     'payload_off': 'False'
                 }
