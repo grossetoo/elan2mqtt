@@ -1,6 +1,5 @@
 {
   "name": "eLAN MQTT Gateway Repository",
   "url": "https://github.com/grossetoo/elan2mqtt",
-  "maintainer": "Grosseto",
-  "version": "2.0.2"
+  "maintainer": "Grosseto"
 }
