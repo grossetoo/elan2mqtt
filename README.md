@@ -111,21 +111,6 @@ Klikni na **Start** a zkontroluj **Log**.
 
 ---
 
-## 📖 Changelog
-
-### 2.0.0 (2026-01-14)
-- ✅ Kompletní Climate Autodiscovery
-- ✅ Podpora preset módů (Away, Eco, Comfort, Boost)
-- ✅ Binary senzory pro termostaty
-- ✅ Number entity pro korekci teploty a window sensitivity
-- ✅ Oprava zobrazení baterie (invertováno pro správný device_class)
-- ✅ Všechny entity seskupené pod jedním zařízením
-
-### 1.16.0
-- Původní verze s manuální YAML konfigurací
-
----
-
 ## 🐛 Podpora
 
 Máš problém? Otevři issue na [GitHubu](https://github.com/grossetoo/elan2mqtt/issues).
