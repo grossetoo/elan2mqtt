@@ -414,7 +414,7 @@ async def main():
                     'payload_on': 'True',
                     'payload_off': 'False'
                 }
-                mqtt_cli.publish(f'homeassistant/sensor/{mac}/error/config',
+                mqtt_cli.publish(f'homeassistant/binary_sensor/{mac}/error/config',
                                 bytearray(json.dumps(binary_error), 'utf-8'))
 
                 # Sensor - Valve position
